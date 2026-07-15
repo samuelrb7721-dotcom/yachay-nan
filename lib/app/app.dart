@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../core/theme/app_theme.dart';
-import 'package:yachay_nan/features/splash/splash_screen.dart';
+import 'package:yachay_nan/core/theme/app_theme.dart';
+import 'package:yachay_nan/features/splash/presentation/splash_screen.dart';
 
 class YachayNanApp extends StatelessWidget {
   const YachayNanApp({super.key});
@@ -11,7 +10,7 @@ class YachayNanApp extends StatelessWidget {
     return MaterialApp(
       title: 'Yachay Ñan',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
+      theme: AppTheme.lightTheme,
       home: const SplashScreen(),
     );
   }
