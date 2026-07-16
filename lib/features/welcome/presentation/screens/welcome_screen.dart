@@ -8,6 +8,65 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
 
+    final double screenHeight = screenSize.height;
+
+    final bool isShortScreen = screenHeight < 760;
+    final bool isVeryShortScreen = screenHeight < 650;
+
+    final double titleTop = isVeryShortScreen
+        ? 42
+        : isShortScreen
+        ? 58
+        : screenHeight * 0.09;
+
+    final double titleFontSize = isVeryShortScreen
+        ? 31
+        : isShortScreen
+        ? 35
+        : 40;
+
+    final double dividerTop = isVeryShortScreen
+        ? 145
+        : isShortScreen
+        ? 170
+        : screenHeight * 0.235;
+
+    final double descriptionTop = isVeryShortScreen
+        ? 185
+        : isShortScreen
+        ? 220
+        : screenHeight * 0.30;
+
+    final double descriptionFontSize = isVeryShortScreen
+        ? 17
+        : isShortScreen
+        ? 19
+        : 22;
+
+    final double catHeight = isVeryShortScreen
+        ? 300
+        : isShortScreen
+        ? 390
+        : 500;
+
+    final double catBottom = isVeryShortScreen
+        ? 88
+        : isShortScreen
+        ? 95
+        : 105;
+
+    final double buttonBottom = isVeryShortScreen
+        ? 18
+        : isShortScreen
+        ? 32
+        : 65;
+
+    final double buttonHeight = isVeryShortScreen
+        ? 54
+        : isShortScreen
+        ? 60
+        : 68;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F5EC),
       body: Center(
@@ -63,15 +122,15 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 // Título
                 Positioned(
-                  top: screenSize.height * 0.09,
+                  top: titleTop,
                   left: 30,
                   right: 30,
-                  child: const Text(
+                  child: Text(
                     '¡Bienvenido a\nYachay Ñan!',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color(0xFF173E3A),
-                      fontSize: 40,
+                      fontSize: titleFontSize,
                       height: 1.08,
                       fontWeight: FontWeight.w800,
                     ),
@@ -79,7 +138,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
 
                 Positioned(
-                  top: screenSize.height * 0.235,
+                  top: dividerTop,
                   left: 35,
                   right: 35,
                   child: SizedBox(
@@ -98,15 +157,15 @@ class WelcomeScreen extends StatelessWidget {
 
                 // Texto descriptivo
                 Positioned(
-                  top: screenSize.height * 0.30,
+                  top: descriptionTop,
                   left: 45,
                   right: 45,
-                  child: const Text(
+                  child: Text(
                     'Aprende, descubre y vive\nla cultura del Perú.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Color(0xFF4A5E67),
-                      fontSize: 22,
+                      color: const Color(0xFF4A5E67),
+                      fontSize: descriptionFontSize,
                       height: 1.45,
                       fontWeight: FontWeight.w400,
                     ),
@@ -117,12 +176,16 @@ class WelcomeScreen extends StatelessWidget {
                 Positioned(
                   left: 35,
                   right: 35,
-                  bottom: 105,
-                  child: Image.asset(
-                    'assets/images/welcome/welcome_cat.png',
-                    height: 620,
-                    fit: BoxFit.contain,
-                    alignment: Alignment.bottomCenter,
+                  bottom: catBottom,
+                  child: IgnorePointer(
+                    child: SizedBox(
+                      height: catHeight,
+                      child: Image.asset(
+                        'assets/images/welcome/welcome_cat.png',
+                        fit: BoxFit.contain,
+                        alignment: Alignment.bottomCenter,
+                      ),
+                    ),
                   ),
                 ),
 
@@ -130,9 +193,9 @@ class WelcomeScreen extends StatelessWidget {
                 Positioned(
                   left: 24,
                   right: 24,
-                  bottom: 65,
+                  bottom: buttonBottom,
                   child: SizedBox(
-                    height: 68,
+                    height: buttonHeight,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).push(

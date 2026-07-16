@@ -4,6 +4,9 @@ import 'package:yachay_nan/features/map/data/peru_departments_data.dart';
 import 'package:yachay_nan/features/map/presentation/screens/map_screen.dart';
 import 'package:yachay_nan/features/gastronomy/presentation/screens/gastronomy_lesson_intro_screen.dart';
 import 'package:yachay_nan/core/session/demo_session.dart';
+import 'package:yachay_nan/features/regions/presentation/screens/region_overview_screen.dart';
+import 'package:yachay_nan/features/profile/presentation/screens/profile_screen.dart';
+import 'package:yachay_nan/features/rewards/presentation/screens/rewards_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({this.initialIndex = 0, super.key});
@@ -36,11 +39,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 const _DashboardHome(),
                 MapScreen(),
-                _PlaceholderPage(
-                  title: 'Recompensas',
-                  icon: Icons.emoji_events_rounded,
-                ),
-                _PlaceholderPage(title: 'Perfil', icon: Icons.person_rounded),
+                const RewardsScreen(),
+                const ProfileScreen(),
               ],
             ),
           ),
@@ -306,18 +306,43 @@ class GridViewSection extends StatelessWidget {
           subtitle: 'Descubre su cultura',
           icon: Icons.waves_rounded,
           color: AppColors.coast,
-        ),
-        _DashboardOptionCard(
-          title: 'Sierra',
-          subtitle: 'Conoce los Andes',
-          icon: Icons.landscape_rounded,
-          color: AppColors.highlands,
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) =>
+                    const RegionOverviewScreen(region: PeruRegion.coast),
+              ),
+            );
+          },
         ),
         _DashboardOptionCard(
           title: 'Selva',
           subtitle: 'Explora la Amazonía',
           icon: Icons.forest_rounded,
           color: AppColors.jungle,
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) =>
+                    const RegionOverviewScreen(region: PeruRegion.jungle),
+              ),
+            );
+          },
+        ),
+
+        _DashboardOptionCard(
+          title: 'Sierra',
+          subtitle: 'Conoce los Andes',
+          icon: Icons.landscape_rounded,
+          color: AppColors.highlands,
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) =>
+                    const RegionOverviewScreen(region: PeruRegion.highlands),
+              ),
+            );
+          },
         ),
       ],
     );
@@ -451,32 +476,6 @@ class _ContinueLearningCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _PlaceholderPage extends StatelessWidget {
-  const _PlaceholderPage({required this.title, required this.icon});
-
-  final String title;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 72, color: AppColors.primary),
-          const SizedBox(height: 16),
-          Text(title, style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 8),
-          const Text(
-            'Esta sección se construirá en el siguiente paso.',
-            style: TextStyle(color: AppColors.textSecondary),
-          ),
-        ],
       ),
     );
   }
