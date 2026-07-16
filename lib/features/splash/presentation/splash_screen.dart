@@ -30,14 +30,16 @@ class _SplashScreenState extends State<SplashScreen> {
 
 final double screenHeight = screenSize.height;
 
-final double logoTop = screenHeight * 0.10;
-final double logoHeight = (screenHeight * 0.20).clamp(180.0, 250.0);
+final double logoTop = screenHeight * 0.06;
+final double logoHeight =
+    (screenHeight * 0.18).clamp(150.0, 220.0).toDouble();
 
-final double textTop = screenHeight * 0.30;
-final double textSize = (screenHeight * 0.025).clamp(22.0, 30.0);
+final double textTop = screenHeight * 0.25;
+final double textSize =
+    (screenHeight * 0.024).clamp(22.0, 28.0).toDouble();
 
-final double catTop = screenHeight * 0.42;
-final double catHeight = (screenHeight * 0.42).clamp(380.0, 540.0);
+final double catHeight =
+    (screenHeight * 0.46).clamp(360.0, 520.0).toDouble();
 
 
     return Scaffold(
@@ -58,7 +60,7 @@ final double catHeight = (screenHeight * 0.42).clamp(380.0, 540.0);
                   ),
                 ),
 
-                Positioned(
+Positioned(
   top: logoTop,
   left: 90,
   right: 90,
@@ -67,38 +69,37 @@ final double catHeight = (screenHeight * 0.42).clamp(380.0, 540.0);
     child: Image.asset(
       'assets/images/splash/yachay_nan_logo.png',
       fit: BoxFit.contain,
-      alignment: Alignment.center,
     ),
   ),
 ),
 
                 Positioned(
-                  top: textTop,
-                  left: 24,
-                  right: 24,
-                  child: Text(
-                    'Explora. Aprende.\nConecta con tus raíces.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF173E3A),
-                      fontSize: textSize,
-                      height: 1.4,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+  top: textTop,
+  left: 24,
+  right: 24,
+  child: Text(
+    'Explora. Aprende.\nConecta con tus raíces.',
+    textAlign: TextAlign.center,
+    style: TextStyle(
+      color: const Color(0xFF173E3A),
+      fontSize: textSize,
+      height: 1.25,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+),
 
-                Positioned(
-                top: catTop,
-  left: 20,
-  right: 20,
+Positioned(
+  left: 30,
+  right: 30,
+  bottom: 42,
   child: IgnorePointer(
     child: SizedBox(
       height: catHeight,
       child: Image.asset(
         'assets/images/splash/splash_cat_walking.png',
         fit: BoxFit.contain,
-        alignment: Alignment.topCenter,
+        alignment: Alignment.bottomCenter,
       ),
     ),
   ),
