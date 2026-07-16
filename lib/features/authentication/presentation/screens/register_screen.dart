@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:yachay_nan/features/diagnostic/presentation/screens/diagnostic_intro_screen.dart';
+import 'package:yachay_nan/core/session/demo_session.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -8,8 +10,47 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController _nameController = TextEditingController();
+  bool _isCreatingAccount = false;
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
+
+  Future<void> _createDemoAccount() async {
+    if (_isCreatingAccount) {
+      return;
+    }
+
+    setState(() {
+      _isCreatingAccount = true;
+    });
+
+    DemoSession.setUserName(_nameController.text);
+
+    await Future<void>.delayed(const Duration(milliseconds: 900));
+
+    if (!mounted) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Cuenta creada correctamente. Bienvenido a Yachay Ñan.'),
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 2),
+      ),
+    );
+
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+
+    if (!mounted) {
+      return;
+    }
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute<void>(builder: (_) => const DiagnosticIntroScreen()),
+      (Route<dynamic> route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +134,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                               const SizedBox(height: 22),
 
-                              const _RegisterField(
+                              _RegisterField(
+                                controller: _nameController,
                                 hintText: 'Nombre completo',
                                 icon: Icons.person_outline_rounded,
                                 keyboardType: TextInputType.name,
@@ -194,7 +236,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 width: double.infinity,
                                 height: 58,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: _isCreatingAccount
+                                      ? null
+                                      : _createDemoAccount,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF2FAAA7),
                                     foregroundColor: Colors.white,
@@ -206,13 +250,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                   ),
-                                  child: const Text(
-                                    'Crear cuenta',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
+                                  child: _isCreatingAccount
+                                      ? const SizedBox(
+                                          width: 24,
+                                          height: 24,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2.6,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : const Text(
+                                          'Crear cuenta',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
                                 ),
                               ),
 
@@ -276,6 +329,7 @@ class _RegisterField extends StatelessWidget {
   const _RegisterField({
     required this.hintText,
     required this.icon,
+    this.controller,
     this.keyboardType,
     this.obscureText = false,
     this.suffixIcon,
@@ -284,6 +338,7 @@ class _RegisterField extends StatelessWidget {
 
   final String hintText;
   final IconData icon;
+  final TextEditingController? controller;
   final TextInputType? keyboardType;
   final bool obscureText;
   final IconData? suffixIcon;
@@ -292,6 +347,7 @@ class _RegisterField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText,
       decoration: _fieldDecoration(

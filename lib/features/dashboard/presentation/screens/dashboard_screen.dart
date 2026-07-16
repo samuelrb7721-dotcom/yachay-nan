@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:yachay_nan/core/theme/app_colors.dart';
+import 'package:yachay_nan/features/map/data/peru_departments_data.dart';
 import 'package:yachay_nan/features/map/presentation/screens/map_screen.dart';
+import 'package:yachay_nan/features/gastronomy/presentation/screens/gastronomy_lesson_intro_screen.dart';
+import 'package:yachay_nan/core/session/demo_session.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({this.initialIndex = 0, super.key});
@@ -30,8 +33,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             constraints: const BoxConstraints(maxWidth: 560),
             child: IndexedStack(
               index: currentIndex,
-              children: const [
-                _DashboardHome(),
+              children: [
+                const _DashboardHome(),
                 MapScreen(),
                 _PlaceholderPage(
                   title: 'Recompensas',
@@ -147,7 +150,7 @@ class _DashboardHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '¡Hola, Samuel!',
+                '¡Hola, ${DemoSession.userName}!',
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
               const SizedBox(height: 4),
@@ -160,10 +163,21 @@ class _DashboardHeader extends StatelessWidget {
         ),
 
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            final icaDepartment = peruDepartments.firstWhere(
+              (department) => department.name == 'Ica',
+            );
+
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) =>
+                    GastronomyLessonIntroScreen(department: icaDepartment),
+              ),
+            );
+          },
           icon: const Icon(
-            Icons.notifications_none_rounded,
-            color: AppColors.textPrimary,
+            Icons.arrow_forward_rounded,
+            color: AppColors.primary,
           ),
         ),
       ],
@@ -273,12 +287,19 @@ class GridViewSection extends StatelessWidget {
       mainAxisSpacing: 14,
       crossAxisSpacing: 14,
       childAspectRatio: 1.15,
-      children: const [
+      children: [
         _DashboardOptionCard(
           title: 'Mapa del Perú',
           subtitle: 'Explora las regiones',
           icon: Icons.map_rounded,
           color: AppColors.info,
+          onTap: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute<void>(
+                builder: (_) => const DashboardScreen(initialIndex: 1),
+              ),
+            );
+          },
         ),
         _DashboardOptionCard(
           title: 'Costa',
@@ -309,18 +330,21 @@ class _DashboardOptionCard extends StatelessWidget {
     required this.subtitle,
     required this.icon,
     required this.color,
+    this.onTap,
   });
 
   final String title;
   final String subtitle;
   final IconData icon;
   final Color color;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       borderRadius: BorderRadius.circular(22),
+
       child: Ink(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
@@ -358,59 +382,75 @@ class _DashboardOptionCard extends StatelessWidget {
 class _ContinueLearningCard extends StatelessWidget {
   const _ContinueLearningCard();
 
+  void _openLastLesson(BuildContext context) {
+    final icaDepartment = peruDepartments.firstWhere(
+      (department) => department.name == 'Ica',
+    );
+
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => GastronomyLessonIntroScreen(department: icaDepartment),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 58,
-            height: 58,
-            decoration: BoxDecoration(
-              color: AppColors.secondaryLight,
-              borderRadius: BorderRadius.circular(18),
+    return InkWell(
+      borderRadius: BorderRadius.circular(22),
+      onTap: () => _openLastLesson(context),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 58,
+              height: 58,
+              decoration: BoxDecoration(
+                color: AppColors.secondaryLight,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: const Icon(
+                Icons.play_lesson_rounded,
+                color: AppColors.secondary,
+                size: 30,
+              ),
             ),
-            child: const Icon(
-              Icons.play_lesson_rounded,
-              color: AppColors.secondary,
-              size: 30,
-            ),
-          ),
 
-          const SizedBox(width: 14),
+            const SizedBox(width: 14),
 
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Continúa tu última lección',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Culturas preincaicas del Perú',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Continúa tu última lección',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Teja Iqueña · Gastronomía de Ica',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.arrow_forward_rounded,
-              color: AppColors.primary,
+            IconButton(
+              onPressed: () => _openLastLesson(context),
+              icon: const Icon(
+                Icons.arrow_forward_rounded,
+                color: AppColors.primary,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
